@@ -21,6 +21,7 @@ import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.checkpoint.OperatorState;
+import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.StateBackend;
 import org.apache.flink.state.api.output.FileCopyFunction;
 import org.apache.flink.state.api.output.MergeOperatorStates;
@@ -73,6 +74,18 @@ public abstract class WritableSavepoint<F extends WritableSavepoint> {
     }
 
     /**
+     * Drop an existing operator from the savepoint.
+     *
+     * @param operatorID The id of the operator.
+     * @return A modified savepoint.
+     */
+    @SuppressWarnings("unchecked")
+    public F removeOperator(OperatorID operatorID) {
+        metadata.removeOperator(operatorID);
+        return (F) this;
+    }
+
+    /**
      * Adds a new operator to the savepoint.
      *
      * @param uid The uid of the operator.
@@ -82,6 +95,19 @@ public abstract class WritableSavepoint<F extends WritableSavepoint> {
     @SuppressWarnings("unchecked")
     public <T> F withOperator(String uid, BootstrapTransformation<T> transformation) {
         metadata.addOperator(uid, transformation);
+        return (F) this;
+    }
+
+    /**
+     * Adds a new operator to the savepoint.
+     *
+     * @param operatorID The id of the operator.
+     * @param transformation The operator to be included.
+     * @return The modified savepoint.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> F withOperator(OperatorID operatorID, BootstrapTransformation<T> transformation) {
+        metadata.addOperator(operatorID, transformation);
         return (F) this;
     }
 

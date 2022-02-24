@@ -82,17 +82,29 @@ public class SavepointMetadata {
      */
     public OperatorState getOperatorState(String uid) throws IOException {
         OperatorID operatorID = OperatorIDGenerator.fromUid(uid);
+        return getOperatorState(operatorID);
+    }
 
+    /**
+     * @return Operator state for the given OperatorID.
+     * @throws IOException If the savepoint does not contain operator state with the given uid.
+     */
+    public OperatorState getOperatorState(OperatorID operatorID) throws IOException {
         OperatorStateSpec operatorState = operatorStateIndex.get(operatorID);
         if (operatorState == null || operatorState.isNewStateTransformation()) {
-            throw new IOException("Savepoint does not contain state with operator uid " + uid);
+            throw new IOException(
+                    "Savepoint does not contain state with operator id " + operatorID);
         }
 
         return operatorState.asExistingState();
     }
 
     public void removeOperator(String uid) {
-        operatorStateIndex.remove(OperatorIDGenerator.fromUid(uid));
+        removeOperator(OperatorIDGenerator.fromUid(uid));
+    }
+
+    public void removeOperator(OperatorID operatorID) {
+        operatorStateIndex.remove(operatorID);
     }
 
     public void addOperator(String uid, BootstrapTransformation<?> transformation) {
@@ -101,6 +113,19 @@ public class SavepointMetadata {
         if (operatorStateIndex.containsKey(id)) {
             throw new IllegalArgumentException(
                     "The savepoint already contains uid " + uid + ". All uid's must be unique");
+        }
+
+        operatorStateIndex.put(
+                id,
+                OperatorStateSpec.newWithTransformation(
+                        new BootstrapTransformationWithID<>(id, transformation)));
+    }
+
+    public void addOperator(OperatorID id, BootstrapTransformation<?> transformation) {
+
+        if (operatorStateIndex.containsKey(id)) {
+            throw new IllegalArgumentException(
+                    "The savepoint already contains id " + id + ". All id's must be unique");
         }
 
         operatorStateIndex.put(

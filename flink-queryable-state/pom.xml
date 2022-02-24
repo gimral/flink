@@ -17,44 +17,42 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.flink</groupId>
-		<artifactId>flink-parent</artifactId>
-		<version>1.12-SNAPSHOT</version>
-		<relativePath>..</relativePath>
-	</parent>
+    <parent>
+        <groupId>org.apache.flink</groupId>
+        <artifactId>flink-parent</artifactId>
+        <version>1.12.7</version>
+        <relativePath>..</relativePath>
+    </parent>
 
-	<artifactId>flink-queryable-state</artifactId>
-	<name>Flink : Queryable state : </name>
-	<packaging>pom</packaging>
+    <artifactId>flink-queryable-state</artifactId>
+    <name>Flink : Queryable state : </name>
+    <packaging>pom</packaging>
 
-	<modules>
-		<module>flink-queryable-state-runtime</module>
-		<module>flink-queryable-state-client-java</module>
-		<!-- <module>flink-state-client-scala</module>-->
-	</modules>
+    <modules>
+        <module>flink-queryable-state-runtime</module>
+        <module>flink-queryable-state-client-java</module>
+        <!-- <module>flink-state-client-scala</module>-->
+    </modules>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.findbugs</groupId>
-			<artifactId>jsr305</artifactId>
-			<scope>provided</scope>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.flink</groupId>
-			<artifactId>flink-test-utils-junit</artifactId>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-test-utils-junit</artifactId>
+        </dependency>
+    </dependencies>
 </project>

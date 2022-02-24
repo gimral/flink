@@ -17,26 +17,24 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.flink</groupId>
-		<artifactId>flink-parent</artifactId>
-		<version>1.12-SNAPSHOT</version>
-		<relativePath>..</relativePath>
-	</parent>
+    <parent>
+        <groupId>org.apache.flink</groupId>
+        <artifactId>flink-parent</artifactId>
+        <version>1.12.7</version>
+        <relativePath>..</relativePath>
+    </parent>
 
-	<artifactId>flink-ml-parent</artifactId>
-	<name>Flink : ML : </name>
+    <artifactId>flink-ml-parent</artifactId>
+    <name>Flink : ML : </name>
 
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-	<modules>
-		<module>flink-ml-api</module>
-		<module>flink-ml-lib</module>
-		<module>flink-ml-uber</module>
-	</modules>
+    <modules>
+        <module>flink-ml-api</module>
+        <module>flink-ml-lib</module>
+        <module>flink-ml-uber</module>
+    </modules>
 </project>

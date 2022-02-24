@@ -31,6 +31,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.runtime.checkpoint.OperatorState;
+import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.StateBackend;
 import org.apache.flink.runtime.state.VoidNamespace;
 import org.apache.flink.state.api.functions.KeyedStateReaderFunction;
@@ -92,6 +93,28 @@ public class ExistingSavepoint extends WritableSavepoint<ExistingSavepoint> {
         this.stateBackend = stateBackend;
     }
 
+    public SavepointMetadata getSavepointMetadata() {
+        return metadata;
+    }
+
+    /**
+     * Read operator {@code ListState} from a {@code Savepoint}.
+     *
+     * @param id The id of the operator.
+     * @param name The (unique) name for the state.
+     * @param typeInfo The type of the elements in the state.
+     * @param <T> The type of the values that are in the list state.
+     * @return A {@code DataSet} representing the elements in state.
+     * @throws IOException If the savepoint path is invalid or the uid does not exist.
+     */
+    public <T> DataSet<T> readListState(OperatorID id, String name, TypeInformation<T> typeInfo)
+            throws IOException {
+        OperatorState operatorState = metadata.getOperatorState(id);
+        ListStateDescriptor<T> descriptor = new ListStateDescriptor<>(name, typeInfo);
+        ListStateInputFormat<T> inputFormat = new ListStateInputFormat<>(operatorState, descriptor);
+        return env.createInput(inputFormat, typeInfo);
+    }
+
     /**
      * Read operator {@code ListState} from a {@code Savepoint}.
      *
@@ -106,6 +129,29 @@ public class ExistingSavepoint extends WritableSavepoint<ExistingSavepoint> {
             throws IOException {
         OperatorState operatorState = metadata.getOperatorState(uid);
         ListStateDescriptor<T> descriptor = new ListStateDescriptor<>(name, typeInfo);
+        ListStateInputFormat<T> inputFormat = new ListStateInputFormat<>(operatorState, descriptor);
+        return env.createInput(inputFormat, typeInfo);
+    }
+
+    /**
+     * Read operator {@code ListState} from a {@code Savepoint} when a custom serializer was used;
+     * e.g., a different serializer than the one returned by {@code
+     * TypeInformation#createSerializer}.
+     *
+     * @param id The id of the operator.
+     * @param name The (unique) name for the state.
+     * @param typeInfo The type of the elements in the state.
+     * @param serializer The serializer used to write the elements into state.
+     * @param <T> The type of the values that are in the list state.
+     * @return A {@code DataSet} representing the elements in state.
+     * @throws IOException If the savepoint path is invalid or the uid does not exist.
+     */
+    public <T> DataSet<T> readListState(
+            OperatorID id, String name, TypeInformation<T> typeInfo, TypeSerializer<T> serializer)
+            throws IOException {
+
+        OperatorState operatorState = metadata.getOperatorState(id);
+        ListStateDescriptor<T> descriptor = new ListStateDescriptor<>(name, serializer);
         ListStateInputFormat<T> inputFormat = new ListStateInputFormat<>(operatorState, descriptor);
         return env.createInput(inputFormat, typeInfo);
     }
